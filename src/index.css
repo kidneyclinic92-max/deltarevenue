@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  background-color: #EDE8F5;
+}
+
+body {
+  @apply font-sans text-slate-800 antialiased;
+  background-color: #EDE8F5;
+  min-height: 100vh;
+}
