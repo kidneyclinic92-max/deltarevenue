@@ -6,28 +6,57 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        'fade-in-up': 'fadeInUp 0.7s ease-out forwards',
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+      },
+      keyframes: {
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(24px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideInLeft: {
+          '0%': { opacity: '0', transform: 'translateX(-48px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        slideInRight: {
+          '0%': { opacity: '0', transform: 'translateX(48px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+      },
+      transitionTimingFunction: {
+        'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
       fontFamily: {
         sans: ['DM Sans', 'system-ui', 'sans-serif'],
         display: ['Outfit', 'system-ui', 'sans-serif'],
       },
       colors: {
+        // Black & Gold – Delta Revenue Partners (deltarevenuepartners.com)
         primary: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#475569',
-          600: '#1e293b',
-          700: '#0f172a',
-          800: '#020617',
-          900: '#0f172a',
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#0a0a0a',   // black – header, footer, hero, headings
         },
         accent: {
+          gold: '#8b7049',   // primary accent – logo, links, buttons
+          goldLight: '#9d8057',
+          goldDark: '#6d5939',
           teal: '#0d9488',
           emerald: '#059669',
         },
-        page: '#EDE8F5', // light lavender site background
+        page: '#0a0a0a',    // dark page background (same as primary-900)
       },
     },
   },

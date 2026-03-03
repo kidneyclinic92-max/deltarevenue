@@ -4,11 +4,11 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #EDE8F5;
+  background-color: #0a0a0a;
 }
 
 body {
-  @apply font-sans text-slate-800 antialiased;
-  background-color: #EDE8F5;
+  @apply font-sans text-primary-200 antialiased;
+  background-color: #0a0a0a;
   min-height: 100vh;
 }
