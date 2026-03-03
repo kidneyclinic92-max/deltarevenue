@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { AnimateOnScroll } from './components/AnimateOnScroll'
+import { StatsBarChart } from './components/charts/StatsBarChart'
+import { RevenueGrowthChart } from './components/charts/RevenueGrowthChart'
+import { ServicesDonutChart } from './components/charts/ServicesDonutChart'
+import { BenefitsChart } from './components/charts/BenefitsChart'
 
 const SPECIALTIES = [
   'Family Medicine', 'Internal Medicine', 'Pediatrics', 'Cardiology', 'Orthopedic Surgery',
@@ -121,12 +125,34 @@ export default function App() {
         </AnimateOnScroll>
 
         {/* The Delta Approach - from Delta site */}
-        <AnimateOnScroll as="section" id="approach" direction="left" className="py-16 lg:py-24 bg-primary-800">
+        <AnimateOnScroll as="section" id="approach" direction="left" className="py-16 lg:py-24 bg-primary-900">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">The Delta Approach</h2>
             <div className="mt-12 grid md:grid-cols-3 gap-8 text-center">
               {DELTA_APPROACH.map((item, i) => (
                 <AnimateOnScroll key={item.title} direction={i % 2 === 0 ? 'left' : 'right'} delay={120 * i} className="p-6 lg:p-8 rounded-lg border border-primary-600 bg-primary-900/50">
+                  <div className="flex justify-center mb-4">
+                    {i === 0 && (
+                      <svg className="w-14 h-14 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1 6.74-2.74L21 16" />
+                        <path d="M21 21v-5h-5" />
+                      </svg>
+                    )}
+                    {i === 1 && (
+                      <svg className="w-14 h-14 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg>
+                    )}
+                    {i === 2 && (
+                      <svg className="w-14 h-14 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                    )}
+                  </div>
                   <h3 className="font-display text-lg font-bold text-accent-gold">{item.title}</h3>
                   <p className="mt-4 text-primary-300 text-sm leading-relaxed">{item.desc}</p>
                 </AnimateOnScroll>
@@ -135,24 +161,31 @@ export default function App() {
           </div>
         </AnimateOnScroll>
 
-        {/* Vision - from Delta site */}
-        <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-900">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="text-primary-300 leading-relaxed">
-              At Delta Revenue Partners, <em>Delta</em> represents progress, the shift from complexity to clarity, from revenue leakage to revenue strength. Our vision is to be the trusted partner that healthcare organizations rely on to transform their financial operations through precision, compliance, and intelligent execution.
-            </p>
-            <p className="mt-6 text-primary-300 leading-relaxed">
-              We envision a future where revenue cycles are not reactive, fragmented, or unpredictable, but optimized, transparent, and continuously improving.
-            </p>
-            <p className="mt-6 text-primary-300 leading-relaxed">
-              By combining expertise, technology, and partnership, we aim to elevate healthcare organizations to their strongest financial state.
-            </p>
-          </div>
-        </AnimateOnScroll>
-
         {/* Where trust connects and revenue endures - from Delta site */}
         <AnimateOnScroll as="section" direction="left" className="py-16 lg:py-24 bg-primary-800">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="flex flex-wrap justify-center gap-10 sm:gap-14 mb-8" aria-hidden>
+              <div className="flex flex-col items-center gap-2">
+                <svg className="w-14 h-14 sm:w-16 sm:h-16 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                <span className="text-primary-400 text-xs font-medium uppercase tracking-wider">Trust</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <svg className="w-14 h-14 sm:w-16 sm:h-16 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                <span className="text-primary-400 text-xs font-medium uppercase tracking-wider">Connects</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <svg className="w-14 h-14 sm:w-16 sm:h-16 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 3v18h18" />
+                  <path d="m19 9-5 5-4-4-3 3" />
+                </svg>
+                <span className="text-primary-400 text-xs font-medium uppercase tracking-wider">Endures</span>
+              </div>
+            </div>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">Where trust connects and revenue endures</h2>
             <p className="mt-6 text-primary-300 leading-relaxed">
               <strong>Delta Revenue Partners</strong> is a healthcare-focused organization established to support the financial operations of healthcare providers through disciplined revenue cycle expertise.
@@ -192,6 +225,9 @@ export default function App() {
                 </AnimateOnScroll>
               ))}
             </div>
+            <AnimateOnScroll direction="left" delay={100}>
+              <StatsBarChart />
+            </AnimateOnScroll>
           </div>
         </AnimateOnScroll>
 
@@ -205,39 +241,23 @@ export default function App() {
             <p className="mt-6 text-primary-300 max-w-2xl mx-auto">
               Are you looking for faster payment processing? Wish to reduce billing overheads? Our advanced billing solutions ensure higher net collections in less time. We offer medical billing & coding services for a wide range of healthcare specialties.
             </p>
+            <AnimateOnScroll direction="right" delay={80}>
+              <RevenueGrowthChart />
+            </AnimateOnScroll>
             <a href="#about" className="inline-flex mt-8 text-accent-gold font-semibold hover:text-accent-goldDark">About Us →</a>
           </div>
         </AnimateOnScroll>
 
-        {/* R.C.M. Letters */}
-        <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold mb-12">Solutions & Services</h2>
-            <p className="text-primary-300 max-w-2xl mx-auto mb-14">
-              Unlock explosive revenue growth and empower your practice with accurate claim processing. Connect with our team to learn how honest and reliable medical claims solutions can help your business succeed.
-            </p>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                { letter: 'R.', title: 'Revenue Growth That Your Practice Deserves' },
-                { letter: 'C.', title: 'Solution By Specialty Focused' },
-                { letter: 'M.', title: 'Managing Each Medical Claim Efficiently' },
-              ].map((item, i) => (
-                <AnimateOnScroll key={item.letter} direction={i % 2 === 0 ? 'left' : 'right'} delay={100 * i} className="p-6 rounded-2xl bg-primary-800 border border-primary-600 text-center">
-                  <span className="font-display text-4xl font-bold text-accent-gold">{item.letter}</span>
-                  <h3 className="font-display text-xl font-semibold text-accent-gold mt-2">{item.title}</h3>
-                </AnimateOnScroll>
-              ))}
-            </div>
-          </div>
-        </AnimateOnScroll>
-
         {/* Services Grid */}
-        <AnimateOnScroll as="section" id="services" direction="left" className="py-16 lg:py-24 bg-primary-800">
+        <AnimateOnScroll as="section" id="services" direction="left" className="py-16 lg:py-24 bg-primary-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold">Solutions & Services</h2>
             <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
               Unlock revenue growth with accurate claim processing. Connect with our team for tailored medical claims solutions.
             </p>
+            <AnimateOnScroll direction="right" delay={60}>
+              <ServicesDonutChart />
+            </AnimateOnScroll>
             <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {SERVICES.map((service, i) => (
                 <AnimateOnScroll key={service.title} direction={i % 2 === 0 ? 'left' : 'right'} delay={60 * i}>
@@ -254,7 +274,7 @@ export default function App() {
         </AnimateOnScroll>
 
         {/* Provider Success CTA */}
-        <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-900">
+        <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">A Solution For Your Practice Needs</h2>
             <p className="mt-4 text-primary-100 max-w-2xl mx-auto">
@@ -338,23 +358,15 @@ export default function App() {
             <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
               For ambitious practices across the United States, we make revenue growth simple and approachable. Our teams are experienced in each medical specialty.
             </p>
+            <AnimateOnScroll direction="left" delay={80}>
+              <BenefitsChart />
+            </AnimateOnScroll>
             <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {BENEFITS.map((benefit, i) => (
                 <AnimateOnScroll key={benefit} direction={i % 2 === 0 ? 'left' : 'right'} delay={70 * i} className="p-6 rounded-xl bg-primary-900 border border-primary-600 text-center">
                   <h3 className="font-display font-semibold text-accent-gold">{benefit}</h3>
                 </AnimateOnScroll>
               ))}
-            </div>
-          </div>
-        </AnimateOnScroll>
-
-        {/* Cost Calculator CTA */}
-        <AnimateOnScroll as="section" id="pricing" direction="left" className="py-16 lg:py-24 bg-primary-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="p-8 lg:p-12 rounded-2xl bg-primary-800 border border-primary-600 text-white text-center">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">Cost Calculator</h2>
-              <p className="mt-2 text-primary-200">Your time and cost-saving path to the best-fit talent for your next project.</p>
-              <a href="#contact" className="inline-flex mt-6 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">Click to Start Saving</a>
             </div>
           </div>
         </AnimateOnScroll>

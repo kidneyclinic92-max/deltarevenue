@@ -9,7 +9,7 @@ import { useInView } from '../hooks/useInView'
  * @param {string} as - HTML element type: 'div', 'section', 'article'. Default 'div'
  * @param {'up'|'left'|'right'} direction - 'up' (default), 'left', or 'right' for sideways slide-in
  */
-export function AnimateOnScroll({ children, className = '', delay = 0, as: Tag = 'div', direction = 'up' }) {
+export function AnimateOnScroll({ children, className = '', delay = 0, as: Tag = 'div', direction = 'up', ...rest }) {
   const [ref, isInView] = useInView({ threshold: 0.08, rootMargin: '-40px 0px -40px 0px' })
 
   const directionClasses = {
@@ -23,6 +23,7 @@ export function AnimateOnScroll({ children, className = '', delay = 0, as: Tag =
       ref={ref}
       className={`transition-all duration-700 ease-out ${directionClasses[direction]} ${className}`}
       style={{ transitionDelay: delay ? `${delay}ms` : undefined }}
+      {...rest}
     >
       {children}
     </Tag>

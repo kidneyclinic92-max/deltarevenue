@@ -7,6 +7,11 @@ html {
   background-color: #0a0a0a;
 }
 
+/* Scroll margin so anchor targets sit below fixed header */
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
 body {
   @apply font-sans text-primary-200 antialiased;
   background-color: #0a0a0a;
