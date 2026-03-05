@@ -452,7 +452,6 @@ export default function App() {
             </div>
           </div>
           <p className="mt-8 text-center text-primary-500 text-sm">Copyright © {new Date().getFullYear()} Delta Revenue Partners - All Rights Reserved.</p>
-          <p className="mt-2 text-center text-primary-500 text-xs">Powered by GoDaddy</p>
         </div>
       </footer>
     </div>
