@@ -32,7 +32,11 @@ jobs:
         run: npm run build
 
       - name: Verify dist
-        run: test -d dist || (echo "Build failed: dist folder missing" && exit 1)
+        run: |
+          if [ ! -d dist ]; then
+            echo "Build failed: dist folder missing"
+            exit 1
+          fi
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
