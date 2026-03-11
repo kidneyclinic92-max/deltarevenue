@@ -41,7 +41,10 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-primary-900 border-b border-primary-800 w-full">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18 w-full">
-            <a href="#" className="font-display font-bold text-xl text-white shrink-0">{header.logoText} <span className="text-accent-gold">{header.logoHighlight}</span></a>
+            <a href="#" className="flex items-center gap-2 shrink-0 min-h-[2.25rem]">
+              <img src="/assets/logo.png" alt={`${header.logoText} ${header.logoHighlight}`} className="h-8 lg:h-9 w-auto object-contain align-middle flex-shrink-0" />
+              <span className="font-display font-bold text-xl text-white leading-none flex items-center -mt-2">{header.logoText} <span className="text-accent-gold">{header.logoHighlight}</span></span>
+            </a>
             <nav className="hidden lg:flex items-center gap-6 lg:gap-8 flex-1 justify-center">
               {(header.navLinks || []).map((link) => (
                 <a key={link.href} href={link.href} className="text-primary-200 hover:text-accent-gold transition">{link.label}</a>
@@ -402,7 +405,10 @@ export default function App() {
       <footer className="bg-primary-900 text-primary-300 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-            <a href="#" className="font-display font-bold text-xl text-white">{footer.logoText} <span className="text-accent-gold">{footer.logoHighlight}</span></a>
+            <a href="#" className="flex items-center gap-2 min-h-[2rem]">
+              <img src="/assets/logo.png" alt={`${footer.logoText} ${footer.logoHighlight}`} className="h-8 w-auto object-contain align-middle flex-shrink-0" />
+              <span className="font-display font-bold text-xl text-white leading-none flex items-center -mt-2">{footer.logoText} <span className="text-accent-gold">{footer.logoHighlight}</span></span>
+            </a>
             <div className="flex flex-wrap justify-center gap-6">
               {(footer.links || []).map((link) => (
                 <a key={link.href} href={link.href} className="hover:text-accent-gold transition">{link.label}</a>
