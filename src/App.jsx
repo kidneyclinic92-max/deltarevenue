@@ -4,65 +4,30 @@ import { StatsBarChart } from './components/charts/StatsBarChart'
 import { RevenueGrowthChart } from './components/charts/RevenueGrowthChart'
 import { ServicesDonutChart } from './components/charts/ServicesDonutChart'
 import { BenefitsChart } from './components/charts/BenefitsChart'
-
-const SPECIALTIES = [
-  'Family Medicine', 'Internal Medicine', 'Pediatrics', 'Cardiology', 'Orthopedic Surgery',
-  'Dermatology', 'OB-GYN', 'Emergency Medicine', 'Radiology', 'Psychiatry', 'Gastroenterology',
-  'Neurology', 'Urology', 'Pulmonology', 'Endocrinology', 'Oncology', 'Other Specialty',
-]
-
-const STATS = [
-  { value: '25%', label: 'Increase Cash Flow' },
-  { value: '97%', label: 'Net Collection Rate' },
-  { value: '<32', label: 'Days in A/R' },
-  { value: '99%', label: 'Client Success Rate' },
-]
-
-const SERVICES = [
-  { title: 'Medical Billing Services', desc: 'End-to-end medical billing from claim entry to payment posting, with advanced monthly or weekly reporting.', href: '#', icon: '📋' },
-  { title: 'Medical Coding Services', desc: 'Outsource to expert coders to optimize revenue while reducing compliance risks.', href: '#', icon: '📝' },
-  { title: 'DME / Ambulatory Billing', desc: '24/7 DME billing and coding experts to boost your revenue.', href: '#', icon: '🩺' },
-  { title: 'Hospital Billing Services', desc: 'Revenue cycle specialists providing efficient billing services to hospitals.', href: '#', icon: '🏥' },
-  { title: 'Practice Audit Services', desc: 'Billing and coding audits to find issues and update your practice with the latest tech.', href: '#', icon: '🔍' },
-  { title: 'Credentialing & Enrollment', desc: 'Provider enrollment and credentialing with insurance payers.', href: '#', icon: '✅' },
-  { title: 'Telehealth Billing', desc: 'Automated billing for virtual care with integrated technology.', href: '#', icon: '📱' },
-  { title: 'Patient Help Desk', desc: 'Dedicated help desk for hospitals, clinics, and private practices.', href: '#', icon: '🎧' },
-]
-
-const WHY_ITEMS = [
-  { title: 'GO FAST', desc: 'Billing and coding key processes so you can understand and improve operations—as it happens.' },
-  { title: 'GO BIG', desc: 'Improve practice billing and coding errors and streamline maximum collections.' },
-  { title: 'GO BOLD', desc: "Dream up and deliver more care to your patients that advance your practice health." },
-  { title: 'GO SMOOTH', desc: 'With Delta Revenue Partners, your practice will achieve the results set for success in a short time.' },
-]
-
-const BENEFITS = [
-  'Eliminate All Pain Points in Your Practice',
-  'Significantly Increases Collections',
-  'Predictable Cash Flows & Increase Revenue',
-  'No Excuses – 100% Accountability',
-  "It's Easy To Use & Monitor Progress",
-]
-
-const ONBOARDING = [
-  'Quick Start to Improved Efficiency',
-  'Seamless Integration',
-  'Step-by-Step Guidance',
-  'Comprehensive Data Migration',
-  'Personalized Onboarding Plan',
-]
-
-// Delta Revenue Partners section content (from https://deltarevenuepartners.com/)
-const DELTA_APPROACH = [
-  { title: 'End to End RCM', desc: 'Delta Revenue Partners offers fully integrated, end-to-end revenue cycle management, aligning people, processes, and technology to protect revenue, reduce friction, and build long-term financial stability for healthcare practices.' },
-  { title: 'Our Clients', desc: 'Delta Revenue Partners provides revenue cycle management services to healthcare providers of all sizes and specialties. From solo practitioners to growing practices and organizations, we support anyone seeking accurate, compliant, and end-to-end revenue cycle solutions.' },
-  { title: 'Compliance', desc: 'Compliance at Delta Revenue Partners is proactive and continuous. Through disciplined processes, secure technology, and regulatory awareness, we safeguard our clients\' revenue while upholding the highest standards of integrity and accountability.' },
-]
+import { useSiteConfig } from './context/SiteConfigContext'
 
 export default function App() {
+  const { config } = useSiteConfig()
   const [specialty, setSpecialty] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [formData, setFormData] = useState({ name: '', email: '', message: '', attachments: [] })
+  const header = config.header || {}
+  const hero = config.hero || {}
+  const deltaApproach = config.deltaApproach || {}
+  const trust = config.trust || {}
+  const specialties = config.specialties || []
+  const stats = config.stats || []
+  const increaseRevenue = config.increaseRevenue || {}
+  const services = config.services || {}
+  const providerCta = config.providerCta || {}
+  const why = config.why || {}
+  const solutionsBySpecialty = config.solutionsBySpecialty || {}
+  const onboarding = config.onboarding || {}
+  const benefits = config.benefits || {}
+  const deltaOne = config.deltaOne || {}
+  const testimonial = config.testimonial || {}
+  const contact = config.contact || {}
+  const footer = config.footer || {}
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -76,25 +41,25 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-primary-900 border-b border-primary-800 w-full">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18 w-full">
-            <a href="#" className="font-display font-bold text-xl text-white shrink-0">Delta <span className="text-accent-gold">Revenue Partners</span></a>
+            <a href="#" className="font-display font-bold text-xl text-white shrink-0">{header.logoText} <span className="text-accent-gold">{header.logoHighlight}</span></a>
             <nav className="hidden lg:flex items-center gap-6 lg:gap-8 flex-1 justify-center">
-              <a href="#approach" className="text-primary-200 hover:text-accent-gold transition">Our Approach</a>
-              <a href="#services" className="text-primary-200 hover:text-accent-gold transition">Services</a>
-              <a href="#contact" className="text-primary-200 hover:text-accent-gold transition">Partner With Us</a>
-              <a href="tel:+13073811774" className="text-primary-200 hover:text-accent-gold">+1 (307) 381-1774</a>
+              {(header.navLinks || []).map((link) => (
+                <a key={link.href} href={link.href} className="text-primary-200 hover:text-accent-gold transition">{link.label}</a>
+              ))}
+              <a href={`tel:${(header.phoneTel || '').replace(/\s/g, '')}`} className="text-primary-200 hover:text-accent-gold">{header.phone}</a>
             </nav>
-            <a href="#contact" className="hidden lg:inline-flex items-center justify-center px-4 py-2 rounded-lg bg-accent-gold text-primary-900 font-medium hover:bg-accent-goldLight transition shrink-0 text-sm">Schedule Assessment</a>
+            <a href="#contact" className="hidden lg:inline-flex items-center justify-center px-4 py-2 rounded-lg bg-accent-gold text-primary-900 font-medium hover:bg-accent-goldLight transition shrink-0 text-sm">{header.ctaText}</a>
             <button type="button" className="lg:hidden p-2 text-primary-200" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Menu">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">{mobileMenuOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}</svg>
             </button>
           </div>
           {mobileMenuOpen && (
             <div className="lg:hidden py-4 border-t border-primary-800 space-y-3">
-              <a href="#approach" className="block text-primary-200 hover:text-accent-gold" onClick={() => setMobileMenuOpen(false)}>Our Approach</a>
-              <a href="#services" className="block text-primary-200 hover:text-accent-gold" onClick={() => setMobileMenuOpen(false)}>Services</a>
-              <a href="#contact" className="block text-primary-200 hover:text-accent-gold" onClick={() => setMobileMenuOpen(false)}>Partner With Us</a>
-              <a href="tel:+13073811774" className="block text-primary-200 hover:text-accent-gold">+1 (307) 381-1774</a>
-              <a href="#contact" className="inline-flex px-4 py-2 rounded-lg bg-accent-gold text-primary-900 font-medium text-sm">Schedule Assessment</a>
+              {(header.navLinks || []).map((link) => (
+                <a key={link.href} href={link.href} className="block text-primary-200 hover:text-accent-gold" onClick={() => setMobileMenuOpen(false)}>{link.label}</a>
+              ))}
+              <a href={`tel:${(header.phoneTel || '').replace(/\s/g, '')}`} className="block text-primary-200 hover:text-accent-gold">{header.phone}</a>
+              <a href="#contact" className="inline-flex px-4 py-2 rounded-lg bg-accent-gold text-primary-900 font-medium text-sm">{header.ctaText}</a>
             </div>
           )}
         </div>
@@ -113,13 +78,13 @@ export default function App() {
               className="absolute inset-0 w-full h-full object-cover"
               poster=""
             >
-              <source src="/assets/herovideo.mp4" type="video/mp4" />
+              <source src={hero.videoSrc || '/assets/herovideo.mp4'} type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-primary-900/80" aria-hidden />
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full text-center">
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight max-w-4xl mx-auto">
-              Top-tier Revenue Cycle Management For Each Medical Specialty
+              {hero.headline}
             </h1>
           </div>
         </AnimateOnScroll>
@@ -127,9 +92,9 @@ export default function App() {
         {/* The Delta Approach - from Delta site */}
         <AnimateOnScroll as="section" id="approach" direction="left" className="py-16 lg:py-24 bg-primary-900">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">The Delta Approach</h2>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">{deltaApproach.title}</h2>
             <div className="mt-12 grid md:grid-cols-3 gap-8 text-center">
-              {DELTA_APPROACH.map((item, i) => (
+              {(deltaApproach.items || []).map((item, i) => (
                 <AnimateOnScroll key={item.title} direction={i % 2 === 0 ? 'left' : 'right'} delay={120 * i} className="p-6 lg:p-8 rounded-lg border border-primary-600 bg-primary-900/50">
                   <div className="flex justify-center mb-4">
                     {i === 0 && (
@@ -186,16 +151,10 @@ export default function App() {
                 <span className="text-primary-400 text-xs font-medium uppercase tracking-wider">Endures</span>
               </div>
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">Where trust connects and revenue endures</h2>
-            <p className="mt-6 text-primary-300 leading-relaxed">
-              <strong>Delta Revenue Partners</strong> is a healthcare-focused organization established to support the financial operations of healthcare providers through disciplined revenue cycle expertise.
-            </p>
-            <p className="mt-6 text-primary-300 leading-relaxed">
-              Built on industry knowledge and operational integrity, Delta Revenue Partners functions as a reliable business partner. The company is structured to deliver consistency, regulatory awareness, and transparency across all engagements, ensuring stability and continuity in an increasingly complex healthcare environment.
-            </p>
-            <p className="mt-6 text-primary-300 leading-relaxed">
-              Delta Revenue Partners maintains a professional culture centred on precision, confidentiality, and compliance. Its organizational approach reflects a commitment to sustainable growth, responsible governance, and enduring business relationships.
-            </p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">{trust.heading}</h2>
+            {(trust.paragraphs || []).map((p, i) => (
+              <p key={i} className="mt-6 text-primary-300 leading-relaxed" dangerouslySetInnerHTML={{ __html: p }} />
+            ))}
           </div>
         </AnimateOnScroll>
 
@@ -209,7 +168,7 @@ export default function App() {
                 className="flex-1 rounded-lg border border-primary-600 bg-primary-800 px-4 py-3 text-primary-100 focus:border-accent-gold focus:ring-2 focus:ring-accent-gold/30 outline-none"
               >
                 <option value="">Select Your Specialty</option>
-                {SPECIALTIES.map((s) => (
+                {specialties.map((s) => (
                   <option key={s} value={s}>{s}</option>
                 ))}
               </select>
@@ -218,7 +177,7 @@ export default function App() {
               </a>
             </div>
             <div className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-              {STATS.map((stat, i) => (
+              {stats.map((stat, i) => (
                 <AnimateOnScroll key={stat.label} direction={i % 2 === 0 ? 'left' : 'right'} delay={80 * i} className="text-center p-6 lg:p-8 rounded-xl bg-primary-800 border border-primary-600 shadow-sm hover:border-primary-500 transition">
                   <div className="font-display text-3xl lg:text-4xl font-bold text-accent-gold">{stat.value}</div>
                   <div className="text-primary-300 text-sm mt-2 font-medium">{stat.label}</div>
@@ -234,32 +193,32 @@ export default function App() {
         {/* Increase Revenue */}
         <AnimateOnScroll as="section" direction="left" className="py-16 lg:py-24 bg-primary-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="font-display text-accent-gold font-semibold text-lg">Increase Your Practice Revenue by 15%-20%</p>
+            <p className="font-display text-accent-gold font-semibold text-lg">{increaseRevenue.subtitle}</p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold mt-2 max-w-3xl mx-auto">
-              Maximize Profitability & Minimize Errors With Delta Revenue Partners
+              {increaseRevenue.title}
             </h2>
             <p className="mt-6 text-primary-300 max-w-2xl mx-auto">
-              Are you looking for faster payment processing? Wish to reduce billing overheads? Our advanced billing solutions ensure higher net collections in less time. We offer medical billing & coding services for a wide range of healthcare specialties.
+              {increaseRevenue.body}
             </p>
             <AnimateOnScroll direction="right" delay={80}>
               <RevenueGrowthChart />
             </AnimateOnScroll>
-            <a href="#about" className="inline-flex mt-8 text-accent-gold font-semibold hover:text-accent-goldDark">About Us →</a>
+            <a href={increaseRevenue.linkHref || '#about'} className="inline-flex mt-8 text-accent-gold font-semibold hover:text-accent-goldDark">{increaseRevenue.linkText}</a>
           </div>
         </AnimateOnScroll>
 
         {/* Services Grid */}
         <AnimateOnScroll as="section" id="services" direction="left" className="py-16 lg:py-24 bg-primary-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold">Solutions & Services</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold">{services.title}</h2>
             <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
-              Unlock revenue growth with accurate claim processing. Connect with our team for tailored medical claims solutions.
+              {services.subtitle}
             </p>
             <AnimateOnScroll direction="right" delay={60}>
               <ServicesDonutChart />
             </AnimateOnScroll>
             <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {SERVICES.map((service, i) => (
+              {(services.items || []).map((service, i) => (
                 <AnimateOnScroll key={service.title} direction={i % 2 === 0 ? 'left' : 'right'} delay={60 * i}>
                   <a href={service.href} className="group block p-6 rounded-xl bg-primary-900 border border-primary-600 hover:border-primary-500 transition text-center">
                     <span className="text-2xl">{service.icon}</span>
@@ -276,23 +235,23 @@ export default function App() {
         {/* Provider Success CTA */}
         <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">A Solution For Your Practice Needs</h2>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">{providerCta.title}</h2>
             <p className="mt-4 text-primary-100 max-w-2xl mx-auto">
-              Whether you're a doctor streamlining collections or a hospital optimizing claims capacity, Delta Revenue Partners has the expertise to get you on your way.
+              {providerCta.body}
             </p>
-            <a href="#contact" className="inline-flex mt-8 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">Talk to an Expert</a>
+            <a href="#contact" className="inline-flex mt-8 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">{providerCta.ctaText}</a>
           </div>
         </AnimateOnScroll>
 
         {/* Why Delta Revenue Partners */}
         <AnimateOnScroll as="section" id="why" direction="left" className="py-16 lg:py-24 bg-primary-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold">Why Delta Revenue Partners?</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold">{why.title}</h2>
             <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
-              Upgrade and simplify your practice to ensure seamless, precise, and efficient service on the go.
+              {why.subtitle}
             </p>
             <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {WHY_ITEMS.map((item, i) => (
+              {(why.items || []).map((item, i) => (
                 <AnimateOnScroll key={item.title} direction={i % 2 === 0 ? 'left' : 'right'} delay={80 * i} className="p-6 rounded-xl border border-primary-600 bg-primary-800/80 text-center">
                   <h3 className="font-display text-lg font-bold text-accent-gold">{item.title}</h3>
                   <p className="mt-2 text-primary-300 text-sm">{item.desc}</p>
@@ -300,8 +259,8 @@ export default function App() {
               ))}
             </div>
             <AnimateOnScroll direction="right" delay={200} className="mt-14 p-8 rounded-2xl bg-primary-800 border border-primary-600 text-center">
-              <h3 className="font-display text-xl font-semibold text-accent-gold">Connect for a free Practice Audit to build your tailored improvement plan</h3>
-              <a href="#contact" className="inline-flex mt-6 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">Connect Now</a>
+              <h3 className="font-display text-xl font-semibold text-accent-gold">{why.auditTitle}</h3>
+              <a href="#contact" className="inline-flex mt-6 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">{why.auditCta}</a>
             </AnimateOnScroll>
           </div>
         </AnimateOnScroll>
@@ -309,43 +268,43 @@ export default function App() {
         {/* Solutions By Specialty */}
         <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="font-display text-accent-gold font-semibold uppercase tracking-wider text-sm">Solutions By Specialty</p>
+            <p className="font-display text-accent-gold font-semibold uppercase tracking-wider text-sm">{solutionsBySpecialty.label}</p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold mt-2">
-              Customized Billing Solutions For Your Medical Specialty
+              {solutionsBySpecialty.title}
             </h2>
             <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
-              Our operations and billing team is here to provide everything you need so you can focus on what matters most: caring for your patients.
+              {solutionsBySpecialty.body}
             </p>
             <ul className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-primary-300 justify-items-center max-w-2xl mx-auto list-none">
-              {['Monthly audits, reporting and analytics', 'Optimized billing process', 'Smooth, accurate and faster', 'More time for patients', 'Reduce in-house cost'].map((item) => (
+              {(solutionsBySpecialty.bullets || []).map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <span className="text-accent-gold">✓</span> {item}
                 </li>
               ))}
             </ul>
-            <a href="#specialties" className="inline-flex mt-8 text-accent-gold font-semibold hover:text-accent-goldDark">View All Specialties →</a>
+            <a href={solutionsBySpecialty.linkHref || '#specialties'} className="inline-flex mt-8 text-accent-gold font-semibold hover:text-accent-goldDark">{solutionsBySpecialty.linkText}</a>
           </div>
         </AnimateOnScroll>
 
         {/* Onboarding */}
         <AnimateOnScroll as="section" direction="left" className="py-16 lg:py-24 bg-primary-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="font-display text-accent-gold font-semibold uppercase tracking-wider text-sm">Welcome to a Smooth Start</p>
+            <p className="font-display text-accent-gold font-semibold uppercase tracking-wider text-sm">{onboarding.label}</p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold mt-2">
-              Effortless Onboarding and Seamless Transition
+              {onboarding.title}
             </h2>
             <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
-              Switching to a new billing service can seem daunting. We've designed our onboarding to be simple and stress-free.
+              {onboarding.body}
             </p>
             <ul className="mt-8 space-y-3 mx-auto w-full max-w-md">
-              {ONBOARDING.map((item) => (
+              {(onboarding.items || []).map((item) => (
                 <li key={item} className="flex items-center justify-center gap-3 text-primary-300 text-center">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-gold/20 text-accent-gold text-sm font-semibold">✓</span>
                   {item}
                 </li>
               ))}
             </ul>
-            <a href="#contact" className="inline-flex mt-10 px-6 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">Let's Connect</a>
+            <a href="#contact" className="inline-flex mt-10 px-6 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">{onboarding.ctaText}</a>
           </div>
         </AnimateOnScroll>
 
@@ -353,16 +312,16 @@ export default function App() {
         <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold">
-              Here's How Delta Revenue Partners Can Benefit Your Practice
+              {benefits.title}
             </h2>
             <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
-              For ambitious practices across the United States, we make revenue growth simple and approachable. Our teams are experienced in each medical specialty.
+              {benefits.subtitle}
             </p>
             <AnimateOnScroll direction="left" delay={80}>
               <BenefitsChart />
             </AnimateOnScroll>
             <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {BENEFITS.map((benefit, i) => (
+              {(benefits.items || []).map((benefit, i) => (
                 <AnimateOnScroll key={benefit} direction={i % 2 === 0 ? 'left' : 'right'} delay={70 * i} className="p-6 rounded-xl bg-primary-900 border border-primary-600 text-center">
                   <h3 className="font-display font-semibold text-accent-gold">{benefit}</h3>
                 </AnimateOnScroll>
@@ -374,12 +333,12 @@ export default function App() {
         {/* Delta One */}
         <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-900 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">Delta One</h2>
-            <p className="mt-2 text-primary-200">The operating system for healthcare providers</p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">{deltaOne.title}</h2>
+            <p className="mt-2 text-primary-200">{deltaOne.subtitle}</p>
             <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
-              Run your entire medical practice, clinic, or hospital on Delta Revenue Partners with our unified solution, designed to streamline the collection process and improve revenue.
+              {deltaOne.body}
             </p>
-            <a href="#contact" className="inline-flex mt-8 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">Get Started Now</a>
+            <a href="#contact" className="inline-flex mt-8 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">{deltaOne.ctaText}</a>
           </div>
         </AnimateOnScroll>
 
@@ -387,28 +346,28 @@ export default function App() {
         <AnimateOnScroll as="section" direction="left" className="py-16 lg:py-24 bg-primary-800">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <blockquote className="font-display text-xl sm:text-2xl text-primary-200 italic">
-              "Delta Revenue Partners has improved our revenue by reducing errors and streamlined the collection process."
+              {testimonial.quote}
             </blockquote>
-            <p className="mt-6 font-semibold text-accent-gold">Donna Arkin</p>
-            <p className="text-primary-400 text-sm">Certified Clinical Nurse Specialist</p>
+            <p className="mt-6 font-semibold text-accent-gold">{testimonial.author}</p>
+            <p className="text-primary-400 text-sm">{testimonial.role}</p>
           </div>
         </AnimateOnScroll>
 
         {/* Partner With Us - from Delta site */}
         <AnimateOnScroll as="section" id="contact" direction="right" className="py-16 lg:py-24 bg-primary-900">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold text-center">Partner With Us</h2>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold text-center">{contact.title}</h2>
             <div className="mt-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
               <div className="text-center lg:text-left">
-                <a href="tel:+13073811774" className="text-white font-semibold hover:text-accent-gold block transition">+1 (307) 381-1774</a>
-                <a href="mailto:info@deltarevenuepartners.com" className="text-white font-semibold hover:text-accent-gold block mt-2 transition">info@deltarevenuepartners.com</a>
+                <a href={`tel:${(contact.phoneTel || '').replace(/\s/g, '')}`} className="text-white font-semibold hover:text-accent-gold block transition">{contact.phone}</a>
+                <a href={`mailto:${contact.email}`} className="text-white font-semibold hover:text-accent-gold block mt-2 transition">{contact.email}</a>
                 <div className="mt-8 pt-8 border-t border-primary-600">
-                  <h3 className="font-display font-semibold text-accent-gold">Hours</h3>
-                  <p className="mt-2 text-primary-400 text-sm">Open today 09:00 am – 05:00 pm</p>
+                  <h3 className="font-display font-semibold text-accent-gold">{contact.hoursTitle}</h3>
+                  <p className="mt-2 text-primary-400 text-sm">{contact.hoursText}</p>
                 </div>
               </div>
               <div className="bg-primary-800 p-8 rounded-lg border border-primary-600 shadow-sm">
-                <h3 className="font-display text-lg font-semibold text-accent-gold mb-6">Drop us a line!</h3>
+                <h3 className="font-display text-lg font-semibold text-accent-gold mb-6">{contact.formTitle}</h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label htmlFor="partner-name" className="block text-sm font-medium text-primary-300 mb-1">Name</label>
@@ -443,15 +402,15 @@ export default function App() {
       <footer className="bg-primary-900 text-primary-300 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-            <a href="#" className="font-display font-bold text-xl text-white">Delta <span className="text-accent-gold">Revenue Partners</span></a>
+            <a href="#" className="font-display font-bold text-xl text-white">{footer.logoText} <span className="text-accent-gold">{footer.logoHighlight}</span></a>
             <div className="flex flex-wrap justify-center gap-6">
-              <a href="#services" className="hover:text-accent-gold transition">Services</a>
-              <a href="#why" className="hover:text-accent-gold transition">Why Us</a>
-              <a href="#contact" className="hover:text-accent-gold transition">Partner With Us</a>
-              <a href="tel:+13073811774" className="hover:text-accent-gold transition">+1 (307) 381-1774</a>
+              {(footer.links || []).map((link) => (
+                <a key={link.href} href={link.href} className="hover:text-accent-gold transition">{link.label}</a>
+              ))}
+              <a href={`tel:${(footer.phoneTel || '').replace(/\s/g, '')}`} className="hover:text-accent-gold transition">{footer.phone}</a>
             </div>
           </div>
-          <p className="mt-8 text-center text-primary-500 text-sm">Copyright © {new Date().getFullYear()} Delta Revenue Partners - All Rights Reserved.</p>
+          <p className="mt-8 text-center text-primary-500 text-sm">Copyright © {new Date().getFullYear()} {footer.copyright}</p>
         </div>
       </footer>
     </div>
