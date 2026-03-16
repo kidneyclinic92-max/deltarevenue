@@ -6,7 +6,6 @@ import Layout from './components/Layout'
 import App from './App.jsx'
 import About from './pages/About'
 import Contact from './pages/Contact'
-import Approach from './pages/Approach'
 import Services from './pages/Services'
 import Career from './pages/Career'
 import Admin from './pages/Admin'
@@ -19,7 +18,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<App />} />
-            <Route path="/approach" element={<Approach />} />
             <Route path="/services" element={<Services />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />

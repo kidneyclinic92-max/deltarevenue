@@ -21,7 +21,7 @@ export default function Contact() {
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold text-center mb-12">{contact.title}</h2>
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             <div className="text-center lg:text-left">
-              <h3 className="font-display font-semibold text-accent-gold mb-4">Get in touch</h3>
+              <h3 className="font-display font-semibold text-accent-gold mb-4">{contact.getInTouchHeading || 'Get in touch'}</h3>
               <a href={`tel:${(contact.phoneTel || '').replace(/\s/g, '')}`} className="text-white font-semibold hover:text-accent-gold block transition">{contact.phone}</a>
               <a href={`mailto:${contact.email}`} className="text-white font-semibold hover:text-accent-gold block mt-2 transition">{contact.email}</a>
               <div className="mt-8 pt-8 border-t border-primary-600">
@@ -30,7 +30,7 @@ export default function Contact() {
               </div>
             </div>
             <div className="bg-primary-800 p-8 rounded-xl border border-primary-600 shadow-sm">
-              <h3 className="font-display text-lg font-semibold text-accent-gold mb-6">Schedule Assessment</h3>
+              <h3 className="font-display text-lg font-semibold text-accent-gold mb-6">{contact.scheduleHeading || 'Schedule Assessment'}</h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="contact-name" className="block text-sm font-medium text-primary-300 mb-1">Name</label>

@@ -14,7 +14,7 @@ export default function Career() {
       {/* Why Join Us */}
       <AnimateOnScroll as="section" className="py-16 lg:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-2xl font-bold text-accent-gold mb-10 text-center">Why Join Us</h2>
+          <h2 className="font-display text-2xl font-bold text-accent-gold mb-10 text-center">{careers.whyJoinHeading || 'Why Join Us'}</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {whyJoin.map((item, i) => (
               <div key={i} className="bg-primary-800/50 border border-primary-600 rounded-xl p-6 text-center">
@@ -29,7 +29,7 @@ export default function Career() {
       {/* Benefits */}
       <AnimateOnScroll as="section" className="py-16 lg:py-20 bg-primary-800/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-2xl font-bold text-accent-gold mb-8 text-center">What We Offer</h2>
+          <h2 className="font-display text-2xl font-bold text-accent-gold mb-8 text-center">{careers.benefitsHeading || 'What We Offer'}</h2>
           <ul className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
             {benefits.map((benefit, i) => (
               <li key={i} className="flex items-center gap-3 text-primary-200">
@@ -44,8 +44,8 @@ export default function Career() {
       {/* Open Positions */}
       <AnimateOnScroll as="section" className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-2xl font-bold text-accent-gold mb-8 text-center">Open Positions</h2>
-          <p className="text-primary-300 text-center mb-10">We are always looking for talented people to join our team. Explore current openings below.</p>
+          <h2 className="font-display text-2xl font-bold text-accent-gold mb-8 text-center">{careers.positionsHeading || 'Open Positions'}</h2>
+          <p className="text-primary-300 text-center mb-10">{careers.positionsSubtitle || 'We are always looking for talented people to join our team. Explore current openings below.'}</p>
           <div className="space-y-4">
             {openRoles.map((role, i) => (
               <div key={i} className="bg-primary-800/50 border border-primary-600 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

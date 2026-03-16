@@ -10,6 +10,7 @@ export default function App() {
   const { config } = useSiteConfig()
   const [specialty, setSpecialty] = useState('')
   const hero = config.hero || {}
+  const deltaApproach = config.deltaApproach || {}
   const trust = config.trust || {}
   const specialties = config.specialties || []
   const stats = config.stats || []
@@ -20,8 +21,6 @@ export default function App() {
   const solutionsBySpecialty = config.solutionsBySpecialty || {}
   const onboarding = config.onboarding || {}
   const benefits = config.benefits || {}
-  const deltaOne = config.deltaOne || {}
-  const testimonial = config.testimonial || {}
 
   return (
     <>
@@ -46,6 +45,43 @@ export default function App() {
             </h1>
           </div>
         </section>
+
+        {/* The Delta Approach */}
+        <AnimateOnScroll as="section" id="approach" direction="left" className="py-16 lg:py-24 bg-primary-900">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">{deltaApproach.title}</h2>
+            <div className="mt-12 grid md:grid-cols-3 gap-8 text-center">
+              {(deltaApproach.items || []).map((item, i) => (
+                <AnimateOnScroll key={item.title} direction={i % 2 === 0 ? 'left' : 'right'} delay={120 * i} className="p-6 lg:p-8 rounded-lg border border-primary-600 bg-primary-800">
+                  <div className="flex justify-center mb-4">
+                    {i === 0 && (
+                      <svg className="w-14 h-14 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <path d="M23 4v6h-6" />
+                        <path d="M1 20v-6h6" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10" />
+                        <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14" />
+                      </svg>
+                    )}
+                    {i === 1 && (
+                      <svg className="w-14 h-14 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg>
+                    )}
+                    {i === 2 && (
+                      <svg className="w-14 h-14 text-accent-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                    )}
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-accent-gold">{item.title}</h3>
+                  <p className="mt-4 text-primary-300 text-sm leading-relaxed">{item.desc}</p>
+                </AnimateOnScroll>
+              ))}
+            </div>
+          </div>
+        </AnimateOnScroll>
 
         {/* Where trust connects and revenue endures - from Delta site */}
         <AnimateOnScroll as="section" direction="left" className="py-16 lg:py-24 bg-primary-800">
@@ -112,7 +148,7 @@ export default function App() {
         </AnimateOnScroll>
 
         {/* Achievements */}
-        <AnimateOnScroll as="section" id="achievements" direction="right" className="py-16 lg:py-24 bg-primary-900">
+        <AnimateOnScroll as="section" id="achievements" direction="right" className="py-16 lg:py-24 bg-primary-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">{achievements.title || 'Our Achievements'}</h2>
             {achievements.subtitle && (
@@ -135,7 +171,7 @@ export default function App() {
         </AnimateOnScroll>
 
         {/* Increase Revenue */}
-        <AnimateOnScroll as="section" direction="left" className="py-16 lg:py-24 bg-primary-800">
+        <AnimateOnScroll as="section" direction="left" className="py-16 lg:py-24 bg-primary-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p className="font-display text-accent-gold font-semibold text-lg">{increaseRevenue.subtitle}</p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-accent-gold mt-2 max-w-3xl mx-auto">
@@ -173,7 +209,7 @@ export default function App() {
             </p>
             <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {(why.items || []).map((item, i) => (
-                <AnimateOnScroll key={item.title} direction={i % 2 === 0 ? 'left' : 'right'} delay={80 * i} className="p-6 rounded-xl border border-primary-600 bg-primary-800/80 text-center">
+                <AnimateOnScroll key={item.title} direction={i % 2 === 0 ? 'left' : 'right'} delay={80 * i} className="p-6 rounded-xl border border-primary-600 bg-primary-800 text-center">
                   <h3 className="font-display text-lg font-bold text-accent-gold">{item.title}</h3>
                   <p className="mt-2 text-primary-300 text-sm">{item.desc}</p>
                 </AnimateOnScroll>
@@ -251,37 +287,8 @@ export default function App() {
           </div>
         </AnimateOnScroll>
 
-        {/* Delta One */}
-        <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-900 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">{deltaOne.title}</h2>
-            <p className="mt-2 text-primary-200">{deltaOne.subtitle}</p>
-            <p className="mt-4 text-primary-300 max-w-2xl mx-auto">
-              {deltaOne.body}
-            </p>
-            <Link to="/contact" className="inline-flex mt-8 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">{deltaOne.ctaText}</Link>
-          </div>
-        </AnimateOnScroll>
 
-        {/* Testimonial */}
-        <AnimateOnScroll as="section" direction="left" className="py-16 lg:py-24 bg-primary-800">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <blockquote className="font-display text-xl sm:text-2xl text-primary-200 italic">
-              {testimonial.quote}
-            </blockquote>
-            <p className="mt-6 font-semibold text-accent-gold">{testimonial.author}</p>
-            <p className="text-primary-400 text-sm">{testimonial.role}</p>
-          </div>
-        </AnimateOnScroll>
 
-        {/* Partner With Us CTA - form moved to Contact page */}
-        <AnimateOnScroll as="section" direction="right" className="py-16 lg:py-24 bg-primary-900">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-accent-gold">Partner With Us</h2>
-            <p className="mt-4 text-primary-300">Schedule an assessment or get in touch — we&apos;re here to help.</p>
-            <Link to="/contact" className="inline-flex mt-8 px-8 py-3 rounded-lg bg-accent-gold text-primary-900 font-semibold hover:bg-accent-goldLight transition">Schedule Assessment</Link>
-          </div>
-        </AnimateOnScroll>
     </>
   )
 }

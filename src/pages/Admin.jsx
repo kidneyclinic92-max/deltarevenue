@@ -4,60 +4,62 @@ import { useSiteConfig } from '../context/SiteConfigContext'
 
 const ADMIN_PASSWORD = 'deltaadmin'
 
-const PAGES = [
+const ADMIN_PAGES = [
   {
-    page: 'Global',
+    id: 'home',
+    label: 'Home',
     sections: [
-      { id: 'header', label: 'Header & Nav' },
-      { id: 'footer', label: 'Footer' },
-    ],
-  },
-  {
-    page: 'Home Page',
-    sections: [
-      { id: 'hero', label: 'Hero' },
+      { id: 'hero', label: 'Hero Section' },
+      { id: 'deltaApproach', label: 'Delta Approach' },
       { id: 'trust', label: 'Trust Section' },
-      { id: 'specialties', label: 'Specialties' },
+      { id: 'specialties', label: 'Specialties Dropdown' },
       { id: 'stats', label: 'Stats' },
       { id: 'achievements', label: 'Achievements' },
       { id: 'increaseRevenue', label: 'Increase Revenue' },
       { id: 'providerCta', label: 'Provider CTA' },
-      { id: 'why', label: 'Why Delta' },
+      { id: 'why', label: 'Why Delta Revenue Partners' },
       { id: 'solutionsBySpecialty', label: 'Solutions by Specialty' },
       { id: 'onboarding', label: 'Onboarding' },
       { id: 'benefits', label: 'Benefits' },
-      { id: 'deltaOne', label: 'Delta One' },
-      { id: 'testimonial', label: 'Testimonial' },
     ],
   },
   {
-    page: 'Our Approach',
-    sections: [
-      { id: 'deltaApproach', label: 'Delta Approach Cards' },
-    ],
-  },
-  {
-    page: 'Services',
+    id: 'services',
+    label: 'Services',
     sections: [
       { id: 'services', label: 'Services List' },
     ],
   },
   {
-    page: 'About Us',
+    id: 'about',
+    label: 'About Us',
     sections: [
+      { id: 'about', label: 'Page Headings' },
+      { id: 'trust', label: 'Who We Are Content' },
+      { id: 'deltaApproach', label: 'Delta Approach Summary' },
       { id: 'locations', label: 'Office Locations' },
     ],
   },
   {
-    page: 'Contact Us',
+    id: 'contact',
+    label: 'Contact Us',
     sections: [
-      { id: 'contact', label: 'Contact Info' },
+      { id: 'contact', label: 'Contact Info & Form' },
     ],
   },
   {
-    page: 'Careers',
+    id: 'careers',
+    label: 'Careers',
     sections: [
       { id: 'careers', label: 'Careers Page' },
+    ],
+  },
+  {
+    id: 'global',
+    label: 'Settings',
+    sections: [
+      { id: 'header', label: 'Header & Navigation' },
+      { id: 'footer', label: 'Footer' },
     ],
   },
 ]
@@ -98,8 +100,8 @@ function AdminLogin({ onLogin }) {
 function Field({ label, value, onChange, multiline, placeholder }) {
   const inputClass = 'w-full rounded-lg border border-primary-600 bg-primary-900 px-4 py-3 text-primary-100 placeholder-primary-500 focus:ring-2 focus:ring-accent-gold outline-none'
   return (
-    <div className="mb-6 text-center">
-      <label className="block text-primary-300 text-sm font-medium mb-2 text-center">{label}</label>
+    <div className="mb-5">
+      <label className="block text-primary-300 text-sm font-medium mb-1.5 text-center">{label}</label>
       {multiline ? (
         <textarea value={value || ''} onChange={(e) => onChange(e.target.value)} className={inputClass} rows={3} placeholder={placeholder} />
       ) : (
@@ -114,7 +116,7 @@ function ListEditor({ items, onChange, singular = 'Item' }) {
   const remove = (i) => onChange(items.filter((_, idx) => idx !== i))
   const update = (i, val) => onChange(items.map((item, idx) => (idx === i ? val : item)))
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {items.map((item, i) => (
         <div key={i} className="flex gap-2 items-start">
           {typeof item === 'string' ? (
@@ -129,27 +131,26 @@ function ListEditor({ items, onChange, singular = 'Item' }) {
               <textarea value={item.desc || ''} onChange={(e) => update(i, { ...item, desc: e.target.value })} placeholder="Description" className="w-full rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" rows={2} />
             </div>
           )}
-          <button type="button" onClick={() => remove(i)} className="text-red-400 hover:text-red-300 px-2">×</button>
+          <button type="button" onClick={() => remove(i)} className="text-red-400 hover:text-red-300 px-2 py-1">×</button>
         </div>
       ))}
-      <button type="button" onClick={add} className="text-accent-gold hover:text-accent-goldLight text-sm">+ Add {singular}</button>
+      <button type="button" onClick={add} className="text-accent-gold hover:text-accent-goldLight text-sm font-medium">+ Add {singular}</button>
     </div>
   )
 }
 
 function LinksEditor({ links, onChange }) {
-  const setLinks = onChange
   return (
-    <>
+    <div className="space-y-2">
       {links.map((link, i) => (
-        <div key={i} className="mb-2 flex gap-2">
-          <input value={link.label || ''} onChange={(e) => setLinks(links.map((l, j) => (j === i ? { ...l, label: e.target.value } : l)))} placeholder="Label" className="flex-1 rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" />
-          <input value={link.href || ''} onChange={(e) => setLinks(links.map((l, j) => (j === i ? { ...l, href: e.target.value } : l)))} placeholder="href (/about, #services)" className="flex-1 rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" />
-          <button type="button" onClick={() => setLinks(links.filter((_, j) => j !== i))} className="text-red-400 px-2">×</button>
+        <div key={i} className="flex gap-2">
+          <input value={link.label || ''} onChange={(e) => onChange(links.map((l, j) => (j === i ? { ...l, label: e.target.value } : l)))} placeholder="Label" className="flex-1 rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" />
+          <input value={link.href || ''} onChange={(e) => onChange(links.map((l, j) => (j === i ? { ...l, href: e.target.value } : l)))} placeholder="href (/about, #services)" className="flex-1 rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" />
+          <button type="button" onClick={() => onChange(links.filter((_, j) => j !== i))} className="text-red-400 px-2">×</button>
         </div>
       ))}
-      <button type="button" onClick={() => setLinks([...links, { label: '', href: '/' }])} className="text-accent-gold hover:text-accent-goldLight text-sm">+ Add link</button>
-    </>
+      <button type="button" onClick={() => onChange([...links, { label: '', href: '/' }])} className="text-accent-gold hover:text-accent-goldLight text-sm font-medium">+ Add link</button>
+    </div>
   )
 }
 
@@ -174,7 +175,7 @@ function SectionEditor({ sectionId, config, updateSection }) {
           <Field label="CTA button text" value={data?.ctaText} onChange={(v) => set('ctaText', v)} />
           <Field label="Phone (display)" value={data?.phone} onChange={(v) => set('phone', v)} />
           <Field label="Phone (tel link)" value={data?.phoneTel} onChange={(v) => set('phoneTel', v)} />
-          <p className="text-primary-300 text-sm mb-2">Nav links</p>
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Navigation Links</h4>
           <LinksEditor links={data?.navLinks || []} onChange={(v) => set('navLinks', v)} />
         </>
       )
@@ -183,7 +184,7 @@ function SectionEditor({ sectionId, config, updateSection }) {
       return (
         <>
           <Field label="Section title" value={data?.title} onChange={(v) => set('title', v)} />
-          <p className="text-primary-300 text-sm mb-2">Cards</p>
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Approach Cards</h4>
           <ListEditor items={data?.items || []} onChange={(v) => set('items', v)} singular="card" />
         </>
       )
@@ -192,7 +193,7 @@ function SectionEditor({ sectionId, config, updateSection }) {
       return (
         <>
           <Field label="Heading" value={data?.heading} onChange={(v) => set('heading', v)} />
-          <p className="text-primary-300 text-sm mb-2">Paragraphs (HTML allowed)</p>
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Paragraphs (HTML allowed)</h4>
           <ListEditor items={data?.paragraphs || []} onChange={(v) => set('paragraphs', v)} singular="paragraph" />
         </>
       )
@@ -200,7 +201,7 @@ function SectionEditor({ sectionId, config, updateSection }) {
     case 'specialties':
       return (
         <>
-          <p className="text-primary-300 text-sm mb-2">Specialty options</p>
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 text-center">Specialty Dropdown Options</h4>
           <ListEditor items={Array.isArray(data) ? data : []} onChange={(v) => updateSection('specialties', () => v)} singular="specialty" />
         </>
       )
@@ -213,13 +214,13 @@ function SectionEditor({ sectionId, config, updateSection }) {
       return (
         <>
           {stats.map((s, i) => (
-            <div key={i} className="mb-4 p-4 rounded-lg border border-primary-600 flex gap-2 items-center">
+            <div key={i} className="mb-3 p-4 rounded-lg border border-primary-600 bg-primary-900/30 flex gap-2 items-center">
               <input value={s.value || ''} onChange={(e) => updateStat(i, 'value', e.target.value)} placeholder="Value (e.g. 25%)" className="flex-1 rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" />
               <input value={s.label || ''} onChange={(e) => updateStat(i, 'label', e.target.value)} placeholder="Label" className="flex-1 rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" />
-              <button type="button" onClick={() => removeStat(i)} className="text-red-400">×</button>
+              <button type="button" onClick={() => removeStat(i)} className="text-red-400 px-2">×</button>
             </div>
           ))}
-          <button type="button" onClick={addStat} className="text-accent-gold hover:text-accent-goldLight text-sm">+ Add stat</button>
+          <button type="button" onClick={addStat} className="text-accent-gold hover:text-accent-goldLight text-sm font-medium">+ Add stat</button>
         </>
       )
     }
@@ -233,15 +234,15 @@ function SectionEditor({ sectionId, config, updateSection }) {
         <>
           <Field label="Title" value={data?.title} onChange={(v) => set('title', v)} />
           <Field label="Subtitle" value={data?.subtitle} onChange={(v) => set('subtitle', v)} multiline />
-          <p className="text-primary-300 text-sm mb-2">Achievement items</p>
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Achievement Items</h4>
           {items.map((s, i) => (
-            <div key={i} className="mb-4 p-4 rounded-lg border border-primary-600 flex gap-2 items-center">
+            <div key={i} className="mb-3 p-4 rounded-lg border border-primary-600 bg-primary-900/30 flex gap-2 items-center">
               <input value={s.value || ''} onChange={(e) => updateItem(i, 'value', e.target.value)} placeholder="Value (e.g. 10+)" className="flex-1 rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" />
               <input value={s.label || ''} onChange={(e) => updateItem(i, 'label', e.target.value)} placeholder="Label" className="flex-1 rounded-lg border border-primary-600 bg-primary-900 px-4 py-2 text-primary-100" />
-              <button type="button" onClick={() => removeItem(i)} className="text-red-400">×</button>
+              <button type="button" onClick={() => removeItem(i)} className="text-red-400 px-2">×</button>
             </div>
           ))}
-          <button type="button" onClick={addItem} className="text-accent-gold hover:text-accent-goldLight text-sm">+ Add achievement</button>
+          <button type="button" onClick={addItem} className="text-accent-gold hover:text-accent-goldLight text-sm font-medium">+ Add achievement</button>
         </>
       )
     }
@@ -264,21 +265,21 @@ function SectionEditor({ sectionId, config, updateSection }) {
       const removeItem = (i) => set('items', items.filter((_, idx) => idx !== i))
       return (
         <>
-          <Field label="Section title" value={data?.title} onChange={(v) => set('title', v)} />
-          <Field label="Subtitle" value={data?.subtitle} onChange={(v) => set('subtitle', v)} multiline />
-          <p className="text-primary-300 text-sm mb-2">Service cards</p>
+          <Field label="Page title" value={data?.title} onChange={(v) => set('title', v)} />
+          <Field label="Page subtitle" value={data?.subtitle} onChange={(v) => set('subtitle', v)} multiline />
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Service Cards</h4>
           {items.map((item, i) => (
-            <div key={i} className="mb-4 p-4 rounded-lg border border-primary-600 space-y-2">
-              <div className="flex justify-between">
-                <span className="text-accent-gold text-sm">Service {i + 1}</span>
-                <button type="button" onClick={() => removeItem(i)} className="text-red-400">×</button>
+            <div key={i} className="mb-4 p-4 rounded-lg border border-primary-600 bg-primary-900/30 space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-accent-gold text-sm font-medium">Service {i + 1}</span>
+                <button type="button" onClick={() => removeItem(i)} className="text-red-400 hover:text-red-300 px-2">×</button>
               </div>
               <Field label="Icon (emoji)" value={item.icon} onChange={(v) => updateItem(i, { icon: v })} />
               <Field label="Title" value={item.title} onChange={(v) => updateItem(i, { title: v })} />
               <Field label="Description" value={item.desc} onChange={(v) => updateItem(i, { desc: v })} multiline />
             </div>
           ))}
-          <button type="button" onClick={addItem} className="text-accent-gold hover:text-accent-goldLight text-sm">+ Add service</button>
+          <button type="button" onClick={addItem} className="text-accent-gold hover:text-accent-goldLight text-sm font-medium">+ Add service</button>
         </>
       )
     }
@@ -288,7 +289,7 @@ function SectionEditor({ sectionId, config, updateSection }) {
         <>
           <Field label="Title" value={data?.title} onChange={(v) => set('title', v)} />
           <Field label="Body" value={data?.body} onChange={(v) => set('body', v)} multiline />
-          <Field label="CTA text" value={data?.ctaText} onChange={(v) => set('ctaText', v)} />
+          <Field label="CTA button text" value={data?.ctaText} onChange={(v) => set('ctaText', v)} />
         </>
       )
 
@@ -297,9 +298,12 @@ function SectionEditor({ sectionId, config, updateSection }) {
         <>
           <Field label="Title" value={data?.title} onChange={(v) => set('title', v)} />
           <Field label="Subtitle" value={data?.subtitle} onChange={(v) => set('subtitle', v)} multiline />
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Feature Cards</h4>
           <ListEditor items={data?.items || []} onChange={(v) => set('items', v)} singular="item" />
-          <Field label="Audit box title" value={data?.auditTitle} onChange={(v) => set('auditTitle', v)} />
-          <Field label="Audit CTA" value={data?.auditCta} onChange={(v) => set('auditCta', v)} />
+          <div className="mt-4 pt-4 border-t border-primary-700">
+            <Field label="Audit box title" value={data?.auditTitle} onChange={(v) => set('auditTitle', v)} />
+            <Field label="Audit CTA button" value={data?.auditCta} onChange={(v) => set('auditCta', v)} />
+          </div>
         </>
       )
 
@@ -309,7 +313,7 @@ function SectionEditor({ sectionId, config, updateSection }) {
           <Field label="Label" value={data?.label} onChange={(v) => set('label', v)} />
           <Field label="Title" value={data?.title} onChange={(v) => set('title', v)} />
           <Field label="Body" value={data?.body} onChange={(v) => set('body', v)} multiline />
-          <p className="text-primary-300 text-sm mb-2">Bullets</p>
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Bullet Points</h4>
           <ListEditor items={data?.bullets || []} onChange={(v) => set('bullets', v)} singular="bullet" />
           <Field label="Link text" value={data?.linkText} onChange={(v) => set('linkText', v)} />
           <Field label="Link href" value={data?.linkHref} onChange={(v) => set('linkHref', v)} />
@@ -322,8 +326,9 @@ function SectionEditor({ sectionId, config, updateSection }) {
           <Field label="Label" value={data?.label} onChange={(v) => set('label', v)} />
           <Field label="Title" value={data?.title} onChange={(v) => set('title', v)} />
           <Field label="Body" value={data?.body} onChange={(v) => set('body', v)} multiline />
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Steps</h4>
           <ListEditor items={data?.items || []} onChange={(v) => set('items', v)} singular="step" />
-          <Field label="CTA text" value={data?.ctaText} onChange={(v) => set('ctaText', v)} />
+          <Field label="CTA button text" value={data?.ctaText} onChange={(v) => set('ctaText', v)} />
         </>
       )
 
@@ -332,33 +337,25 @@ function SectionEditor({ sectionId, config, updateSection }) {
         <>
           <Field label="Title" value={data?.title} onChange={(v) => set('title', v)} multiline />
           <Field label="Subtitle" value={data?.subtitle} onChange={(v) => set('subtitle', v)} multiline />
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Benefit Items</h4>
           <ListEditor items={data?.items || []} onChange={(v) => set('items', v)} singular="benefit" />
         </>
       )
 
-    case 'deltaOne':
+    case 'about':
       return (
         <>
-          <Field label="Title" value={data?.title} onChange={(v) => set('title', v)} />
-          <Field label="Subtitle" value={data?.subtitle} onChange={(v) => set('subtitle', v)} />
-          <Field label="Body" value={data?.body} onChange={(v) => set('body', v)} multiline />
-          <Field label="CTA text" value={data?.ctaText} onChange={(v) => set('ctaText', v)} />
-        </>
-      )
-
-    case 'testimonial':
-      return (
-        <>
-          <Field label="Quote" value={data?.quote} onChange={(v) => set('quote', v)} multiline />
-          <Field label="Author" value={data?.author} onChange={(v) => set('author', v)} />
-          <Field label="Role" value={data?.role} onChange={(v) => set('role', v)} />
+          <Field label="'Who We Are' heading" value={data?.whoWeAreHeading} onChange={(v) => set('whoWeAreHeading', v)} placeholder="Who We Are" />
+          <Field label="'Our Locations' heading" value={data?.locationsHeading} onChange={(v) => set('locationsHeading', v)} placeholder="Our Locations" />
         </>
       )
 
     case 'contact':
       return (
         <>
-          <Field label="Section title" value={data?.title} onChange={(v) => set('title', v)} />
+          <Field label="Page title" value={data?.title} onChange={(v) => set('title', v)} />
+          <Field label="'Get in touch' heading" value={data?.getInTouchHeading} onChange={(v) => set('getInTouchHeading', v)} placeholder="Get in touch" />
+          <Field label="Form heading" value={data?.scheduleHeading} onChange={(v) => set('scheduleHeading', v)} placeholder="Schedule Assessment" />
           <Field label="Phone (display)" value={data?.phone} onChange={(v) => set('phone', v)} />
           <Field label="Phone (tel)" value={data?.phoneTel} onChange={(v) => set('phoneTel', v)} />
           <Field label="Email" value={data?.email} onChange={(v) => set('email', v)} />
@@ -376,7 +373,7 @@ function SectionEditor({ sectionId, config, updateSection }) {
           <Field label="Phone (display)" value={data?.phone} onChange={(v) => set('phone', v)} />
           <Field label="Phone (tel)" value={data?.phoneTel} onChange={(v) => set('phoneTel', v)} />
           <Field label="Copyright" value={data?.copyright} onChange={(v) => set('copyright', v)} />
-          <p className="text-primary-300 text-sm mb-2 mt-4">Footer links</p>
+          <h4 className="text-primary-300 text-sm font-semibold mb-2 mt-4 text-center">Footer Links</h4>
           <LinksEditor links={data?.links || []} onChange={(v) => set('links', v)} />
         </>
       )
@@ -388,75 +385,90 @@ function SectionEditor({ sectionId, config, updateSection }) {
       const removeLoc = (i) => updateSection('locations', () => locs.filter((_, idx) => idx !== i))
       return (
         <>
-          <p className="text-primary-300 text-sm mb-2">Office locations (shown on About page)</p>
           {locs.map((loc, i) => (
-            <div key={i} className="mb-4 p-4 rounded-lg border border-primary-600 space-y-2">
-              <div className="flex justify-between">
-                <span className="text-accent-gold text-sm">Location {i + 1}</span>
-                <button type="button" onClick={() => removeLoc(i)} className="text-red-400">×</button>
+            <div key={i} className="mb-4 p-4 rounded-lg border border-primary-600 bg-primary-900/30 space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-accent-gold text-sm font-medium">Location {i + 1}</span>
+                <button type="button" onClick={() => removeLoc(i)} className="text-red-400 hover:text-red-300 px-2">×</button>
               </div>
               <Field label="Name" value={loc.name} onChange={(v) => updateLoc(i, { name: v })} placeholder="e.g. United States" />
               <Field label="Address (use line breaks)" value={loc.address} onChange={(v) => updateLoc(i, { address: v })} multiline placeholder="30 N Gould St Ste N&#10;Sheridan, WY 82801" />
               <Field label="Phone (optional)" value={loc.phone} onChange={(v) => updateLoc(i, { phone: v })} placeholder="+92-333-096-0543" />
             </div>
           ))}
-          <button type="button" onClick={addLoc} className="text-accent-gold hover:text-accent-goldLight text-sm">+ Add location</button>
+          <button type="button" onClick={addLoc} className="text-accent-gold hover:text-accent-goldLight text-sm font-medium">+ Add location</button>
         </>
       )
     }
 
     case 'careers': {
       const whyJoin = data?.whyJoin || []
-      const benefits = data?.benefits || []
+      const bens = data?.benefits || []
       const openRoles = data?.openRoles || []
-      const updateWhyJoin = (v) => set('whyJoin', v)
-      const updateBenefits = (v) => set('benefits', v)
       const updateRole = (i, patch) => set('openRoles', openRoles.map((r, idx) => (idx === i ? { ...r, ...patch } : r)))
       const addRole = () => set('openRoles', [...openRoles, { title: '', location: '', dept: '' }])
       const removeRole = (i) => set('openRoles', openRoles.filter((_, idx) => idx !== i))
       return (
         <>
-          <p className="text-primary-300 text-sm mb-2 font-semibold">Why Join Us cards</p>
-          <ListEditor items={whyJoin} onChange={updateWhyJoin} singular="card" />
-
-          <p className="text-primary-300 text-sm mb-2 mt-6 font-semibold">Benefits list</p>
-          <ListEditor items={benefits} onChange={updateBenefits} singular="benefit" />
-
-          <p className="text-primary-300 text-sm mb-2 mt-6 font-semibold">Open Positions</p>
-          {openRoles.map((role, i) => (
-            <div key={i} className="mb-4 p-4 rounded-lg border border-primary-600 space-y-2">
-              <div className="flex justify-between">
-                <span className="text-accent-gold text-sm">Role {i + 1}</span>
-                <button type="button" onClick={() => removeRole(i)} className="text-red-400">×</button>
-              </div>
-              <Field label="Job title" value={role.title} onChange={(v) => updateRole(i, { title: v })} />
-              <Field label="Department" value={role.dept} onChange={(v) => updateRole(i, { dept: v })} />
-              <Field label="Location" value={role.location} onChange={(v) => updateRole(i, { location: v })} placeholder="Remote / On-site" />
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-primary-300 text-sm font-semibold mb-3 text-center">Page Headings</h4>
+              <Field label="'Why Join Us' heading" value={data?.whyJoinHeading} onChange={(v) => set('whyJoinHeading', v)} placeholder="Why Join Us" />
+              <Field label="'What We Offer' heading" value={data?.benefitsHeading} onChange={(v) => set('benefitsHeading', v)} placeholder="What We Offer" />
+              <Field label="'Open Positions' heading" value={data?.positionsHeading} onChange={(v) => set('positionsHeading', v)} placeholder="Open Positions" />
+              <Field label="Positions subtitle" value={data?.positionsSubtitle} onChange={(v) => set('positionsSubtitle', v)} multiline />
             </div>
-          ))}
-          <button type="button" onClick={addRole} className="text-accent-gold hover:text-accent-goldLight text-sm">+ Add position</button>
 
-          <p className="text-primary-300 text-sm mb-2 mt-6 font-semibold">Bottom CTA</p>
-          <Field label="CTA Title" value={data?.ctaTitle} onChange={(v) => set('ctaTitle', v)} />
-          <Field label="CTA Body" value={data?.ctaBody} onChange={(v) => set('ctaBody', v)} multiline />
-          <Field label="CTA Button text" value={data?.ctaButton} onChange={(v) => set('ctaButton', v)} />
+            <div className="pt-4 border-t border-primary-700">
+              <h4 className="text-primary-300 text-sm font-semibold mb-3 text-center">Why Join Us Cards</h4>
+              <ListEditor items={whyJoin} onChange={(v) => set('whyJoin', v)} singular="card" />
+            </div>
+
+            <div className="pt-4 border-t border-primary-700">
+              <h4 className="text-primary-300 text-sm font-semibold mb-3 text-center">Benefits List</h4>
+              <ListEditor items={bens} onChange={(v) => set('benefits', v)} singular="benefit" />
+            </div>
+
+            <div className="pt-4 border-t border-primary-700">
+              <h4 className="text-primary-300 text-sm font-semibold mb-3 text-center">Open Positions</h4>
+              {openRoles.map((role, i) => (
+                <div key={i} className="mb-4 p-4 rounded-lg border border-primary-600 bg-primary-900/30 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-accent-gold text-sm font-medium">Role {i + 1}</span>
+                    <button type="button" onClick={() => removeRole(i)} className="text-red-400 hover:text-red-300 px-2">×</button>
+                  </div>
+                  <Field label="Job title" value={role.title} onChange={(v) => updateRole(i, { title: v })} />
+                  <Field label="Department" value={role.dept} onChange={(v) => updateRole(i, { dept: v })} />
+                  <Field label="Location" value={role.location} onChange={(v) => updateRole(i, { location: v })} placeholder="Remote / On-site" />
+                </div>
+              ))}
+              <button type="button" onClick={addRole} className="text-accent-gold hover:text-accent-goldLight text-sm font-medium">+ Add position</button>
+            </div>
+
+            <div className="pt-4 border-t border-primary-700">
+              <h4 className="text-primary-300 text-sm font-semibold mb-3 text-center">Bottom CTA</h4>
+              <Field label="CTA Title" value={data?.ctaTitle} onChange={(v) => set('ctaTitle', v)} />
+              <Field label="CTA Body" value={data?.ctaBody} onChange={(v) => set('ctaBody', v)} multiline />
+              <Field label="CTA Button text" value={data?.ctaButton} onChange={(v) => set('ctaButton', v)} />
+            </div>
+          </div>
         </>
       )
     }
 
     default:
-      return <p className="text-primary-400">Edit in JSON export/import.</p>
+      return <p className="text-primary-400">No editor available for this section.</p>
   }
 }
 
 export default function Admin() {
   const [authenticated, setAuthenticated] = useState(() => sessionStorage.getItem('admin-auth') === '1')
   const { config, updateSection, replaceConfig, resetToDefaults } = useSiteConfig()
+  const [activePage, setActivePage] = useState('home')
   const [exportImport, setExportImport] = useState('')
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
-  const handleExport = () => {
-    setExportImport(JSON.stringify(config, null, 2))
-  }
+  const handleExport = () => setExportImport(JSON.stringify(config, null, 2))
   const handleImport = () => {
     try {
       const next = JSON.parse(exportImport)
@@ -471,57 +483,117 @@ export default function Admin() {
     setAuthenticated(false)
   }
 
-  if (!authenticated) {
-    return <AdminLogin onLogin={setAuthenticated} />
-  }
+  if (!authenticated) return <AdminLogin onLogin={setAuthenticated} />
+
+  const currentPage = ADMIN_PAGES.find((p) => p.id === activePage) || ADMIN_PAGES[0]
 
   return (
     <div className="min-h-screen bg-primary-900">
-      <header className="sticky top-0 z-10 bg-primary-800 border-b border-primary-600 px-4 py-3 flex flex-wrap items-center justify-center gap-3">
-        <span className="font-display font-bold text-accent-gold">Admin</span>
-        <Link to="/" className="text-primary-300 hover:text-accent-gold text-sm px-3 py-1.5 rounded-lg hover:bg-primary-700 transition">
-          View site
-        </Link>
-        <button type="button" onClick={handleExport} className="px-3 py-1.5 rounded-lg border border-primary-600 text-primary-300 text-sm hover:bg-primary-700 transition">
-          Export JSON
-        </button>
-        <button type="button" onClick={resetToDefaults} className="px-3 py-1.5 rounded-lg border border-red-600/50 text-red-400 text-sm hover:bg-red-900/20 transition">
-          Reset all
-        </button>
-        <button type="button" onClick={handleLogout} className="px-3 py-1.5 rounded-lg text-primary-500 text-sm hover:text-primary-300 transition">
-          Log out
-        </button>
-      </header>
-
-      <main className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-10 pb-20 flex flex-col items-center text-center">
-        <h1 className="text-3xl font-bold text-white mb-12">Customize your site</h1>
-
-        {PAGES.map((group) => (
-          <div key={group.page} className="w-full mb-16">
-            <h2 className="text-2xl font-bold text-white mb-6 pb-3 border-b border-primary-600">{group.page}</h2>
-            {group.sections.map((s) => (
-              <section key={s.id} id={`admin-${s.id}`} className="w-full mb-10">
-                <h3 className="text-lg font-semibold text-accent-gold mb-4">{s.label}</h3>
-                <div className="bg-primary-800 border border-primary-600 rounded-xl p-8 sm:p-10 text-center min-h-[120px]">
-                  <SectionEditor sectionId={s.id} config={config} updateSection={updateSection} />
-                </div>
-              </section>
+      <nav className="sticky top-0 z-20 bg-primary-800 border-b border-primary-700 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="hidden md:flex items-center justify-center gap-1 py-2 overflow-x-auto">
+            {ADMIN_PAGES.map((page) => (
+              <button
+                key={page.id}
+                type="button"
+                onClick={() => setActivePage(page.id)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
+                  activePage === page.id
+                    ? 'bg-accent-gold text-primary-900'
+                    : 'text-primary-300 hover:text-white hover:bg-primary-700'
+                }`}
+              >
+                {page.label}
+              </button>
             ))}
+            <span className="mx-1 text-primary-600">|</span>
+            <Link to="/" className="px-4 py-2 rounded-lg text-sm font-medium text-primary-300 hover:text-white hover:bg-primary-700 whitespace-nowrap transition">View Site</Link>
+            <button type="button" onClick={handleLogout} className="px-4 py-2 rounded-lg text-sm font-medium text-primary-300 hover:text-white hover:bg-primary-700 whitespace-nowrap transition">Log out</button>
           </div>
-        ))}
+          <div className="md:hidden py-2">
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+              className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-primary-700 text-white text-sm font-medium"
+            >
+              <span>{currentPage.label}</span>
+              <svg className={`w-4 h-4 transition-transform ${mobileNavOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {mobileNavOpen && (
+              <div className="mt-1 rounded-lg bg-primary-700 border border-primary-600 overflow-hidden">
+                {ADMIN_PAGES.map((page) => (
+                  <button
+                    key={page.id}
+                    type="button"
+                    onClick={() => { setActivePage(page.id); setMobileNavOpen(false) }}
+                    className={`w-full text-left px-4 py-2.5 text-sm transition ${
+                      activePage === page.id
+                        ? 'bg-accent-gold/20 text-accent-gold font-medium'
+                        : 'text-primary-200 hover:bg-primary-600'
+                    }`}
+                  >
+                    {page.label}
+                  </button>
+                ))}
+                <div className="border-t border-primary-600">
+                  <Link to="/" className="block w-full text-left px-4 py-2.5 text-sm text-primary-200 hover:bg-primary-600 transition">View Site</Link>
+                  <button type="button" onClick={handleLogout} className="w-full text-left px-4 py-2.5 text-sm text-primary-200 hover:bg-primary-600 transition">Log out</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
 
-        <section className="w-full mt-8">
-          <h2 className="text-xl font-semibold text-accent-gold mb-3">Import / Export full config</h2>
-          <textarea
-            value={exportImport}
-            onChange={(e) => setExportImport(e.target.value)}
-            placeholder="Paste JSON here to import, or click Export JSON above"
-            className="w-full rounded-lg border border-primary-600 bg-primary-900 px-5 py-4 text-primary-100 font-mono text-sm min-h-[180px] text-left"
-          />
-          <button type="button" onClick={handleImport} className="mt-3 py-3 px-6 rounded-lg bg-accent-gold text-primary-900 font-medium hover:bg-accent-goldLight">
-            Import JSON
-          </button>
-        </section>
+      {/* Main content */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
+        <div className="flex flex-col items-center gap-4 mb-8">
+          <h1 className="text-2xl font-bold text-white text-center">{currentPage.label}</h1>
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            <button type="button" onClick={handleExport} className="px-3 py-1.5 rounded-lg border border-primary-600 text-primary-300 text-sm hover:bg-primary-800 transition">
+              Export JSON
+            </button>
+            <button type="button" onClick={resetToDefaults} className="px-3 py-1.5 rounded-lg border border-red-600/50 text-red-400 text-sm hover:bg-red-900/20 transition">
+              Reset All
+            </button>
+          </div>
+        </div>
+
+        {/* Section editors for current page */}
+        <div className="space-y-8">
+          {currentPage.sections.map((s) => (
+            <section key={s.id} className="bg-primary-800 border border-primary-600 rounded-xl overflow-hidden">
+              <div className="px-6 py-4 bg-primary-800 border-b border-primary-700 text-center">
+                <h3 className="text-lg font-semibold text-accent-gold">{s.label}</h3>
+              </div>
+              <div className="p-6">
+                <SectionEditor sectionId={s.id} config={config} updateSection={updateSection} />
+              </div>
+            </section>
+          ))}
+        </div>
+
+        {/* Import/Export */}
+        {activePage === 'global' && (
+          <section className="mt-10 bg-primary-800 border border-primary-600 rounded-xl overflow-hidden">
+            <div className="px-6 py-4 border-b border-primary-700 text-center">
+              <h3 className="text-lg font-semibold text-accent-gold">Import / Export Full Config</h3>
+            </div>
+            <div className="p-6">
+              <textarea
+                value={exportImport}
+                onChange={(e) => setExportImport(e.target.value)}
+                placeholder="Paste JSON here to import, or click Export JSON above"
+                className="w-full rounded-lg border border-primary-600 bg-primary-900 px-5 py-4 text-primary-100 font-mono text-sm min-h-[180px] text-left"
+              />
+              <button type="button" onClick={handleImport} className="mt-3 py-2.5 px-6 rounded-lg bg-accent-gold text-primary-900 font-medium hover:bg-accent-goldLight transition">
+                Import JSON
+              </button>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   )

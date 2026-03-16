@@ -3,6 +3,7 @@ import { AnimateOnScroll } from '../components/AnimateOnScroll'
 
 export default function About() {
   const { config } = useSiteConfig()
+  const about = config.about || {}
   const trust = config.trust || {}
   const deltaApproach = config.deltaApproach || {}
   const locations = config.locations || []
@@ -12,7 +13,7 @@ export default function About() {
       {/* Who We Are / Trust content */}
       <AnimateOnScroll as="section" className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-2xl font-bold text-accent-gold mb-8 text-center">Who We Are</h2>
+          <h2 className="font-display text-2xl font-bold text-accent-gold mb-8 text-center">{about.whoWeAreHeading || 'Who We Are'}</h2>
           <div className="space-y-6 text-primary-200 leading-relaxed">
             {(trust.paragraphs || []).map((p, i) => (
               <p key={i} dangerouslySetInnerHTML={{ __html: p }} className="text-primary-200" />
@@ -39,7 +40,7 @@ export default function About() {
       {/* Our Locations */}
       <AnimateOnScroll as="section" className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-2xl font-bold text-accent-gold mb-10 text-center">Our Locations</h2>
+          <h2 className="font-display text-2xl font-bold text-accent-gold mb-10 text-center">{about.locationsHeading || 'Our Locations'}</h2>
           <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8">
             {locations.map((loc, i) => (
               <div key={i} className="bg-primary-800/50 border border-primary-600 rounded-xl p-6">

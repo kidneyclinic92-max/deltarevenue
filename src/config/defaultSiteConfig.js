@@ -10,11 +10,12 @@ export const defaultSiteConfig = {
     logoText: 'Delta',
     logoHighlight: 'Revenue Partners',
     navLinks: [
-      { label: 'Our Approach', href: '/approach' },
+      { label: 'Home', href: '/' },
+      { label: 'Our Approach', href: '/#approach' },
       { label: 'Services', href: '/services' },
+      { label: 'Careers', href: '/careers' },
       { label: 'About Us', href: '/about' },
       { label: 'Contact Us', href: '/contact' },
-      { label: 'Careers', href: '/careers' },
     ],
     ctaText: 'Schedule Assessment',
     phone: '+1 (307) 381-1774',
@@ -133,6 +134,10 @@ export const defaultSiteConfig = {
     role: 'Certified Clinical Nurse Specialist',
   },
   careers: {
+    whyJoinHeading: 'Why Join Us',
+    benefitsHeading: 'What We Offer',
+    positionsHeading: 'Open Positions',
+    positionsSubtitle: 'We are always looking for talented people to join our team. Explore current openings below.',
     whyJoin: [
       { title: 'Growth & learning', desc: 'Work with experienced teams in revenue cycle management and healthcare operations. We invest in training and development so you can grow with us.' },
       { title: 'Impact that matters', desc: 'Help healthcare providers focus on patient care by supporting their revenue cycle. Your work directly improves practice efficiency and patient outcomes.' },
@@ -156,12 +161,18 @@ export const defaultSiteConfig = {
     ctaBody: "Send us your resume and tell us how you can contribute. We'd love to hear from you.",
     ctaButton: 'Get in Touch',
   },
+  about: {
+    whoWeAreHeading: 'Who We Are',
+    locationsHeading: 'Our Locations',
+  },
   locations: [
     { name: 'United States', address: '30 N Gould St Ste N\nSheridan, WY 82801\nUnited States', phone: '' },
     { name: 'Pakistan', address: 'Gulraiz II, RWP 46210\nPakistan', phone: '+92-333-096-0543' },
   ],
   contact: {
     title: 'Partner With Us',
+    getInTouchHeading: 'Get in touch',
+    scheduleHeading: 'Schedule Assessment',
     phone: '+1 (307) 381-1774',
     phoneTel: '+13073811774',
     email: 'info@deltarevenuepartners.com',
