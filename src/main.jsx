@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { SiteConfigProvider } from './context/SiteConfigContext'
+import { AppointmentsProvider } from './context/AppointmentsContext'
 import Layout from './components/Layout'
 import App from './App.jsx'
 import About from './pages/About'
@@ -14,6 +15,7 @@ import './index.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <SiteConfigProvider>
+      <AppointmentsProvider>
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
@@ -26,6 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </BrowserRouter>
+      </AppointmentsProvider>
     </SiteConfigProvider>
   </React.StrictMode>,
 )

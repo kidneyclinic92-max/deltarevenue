@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSiteConfig } from '../context/SiteConfigContext'
+import { useAppointments } from '../context/AppointmentsContext'
+import { sendAppointmentConfirmationEmail } from '../utils/sendAppointmentEmail'
 
 const ADMIN_PASSWORD = 'deltaadmin'
 
@@ -53,6 +55,11 @@ const ADMIN_PAGES = [
     sections: [
       { id: 'careers', label: 'Careers Page' },
     ],
+  },
+  {
+    id: 'appointments',
+    label: 'Appointments',
+    sections: [],
   },
   {
     id: 'global',
@@ -461,6 +468,119 @@ function SectionEditor({ sectionId, config, updateSection }) {
   }
 }
 
+const STATUS_CONFIG = {
+  pending: { label: 'Pending', color: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30' },
+  approved: { label: 'Approved', color: 'text-green-400 bg-green-400/10 border-green-400/30' },
+  rejected: { label: 'Rejected', color: 'text-red-400 bg-red-400/10 border-red-400/30' },
+}
+
+function AppointmentsManager() {
+  const { appointments, updateStatus, deleteAppointment } = useAppointments()
+  const [filter, setFilter] = useState('all')
+  const [emailFeedback, setEmailFeedback] = useState(null)
+
+  const handleApprove = async (appt) => {
+    updateStatus(appt.id, 'approved')
+    setEmailFeedback(null)
+    const result = await sendAppointmentConfirmationEmail(appt)
+    if (result.ok) {
+      setEmailFeedback({ type: 'success', msg: `Confirmation email sent to ${appt.email}` })
+    } else {
+      setEmailFeedback({ type: 'error', msg: result.error || 'Failed to send email' })
+    }
+    setTimeout(() => setEmailFeedback(null), 5000)
+  }
+
+  const filtered = filter === 'all' ? appointments : appointments.filter((a) => a.status === filter)
+  const counts = {
+    all: appointments.length,
+    pending: appointments.filter((a) => a.status === 'pending').length,
+    approved: appointments.filter((a) => a.status === 'approved').length,
+    rejected: appointments.filter((a) => a.status === 'rejected').length,
+  }
+
+  return (
+    <div>
+      {emailFeedback && (
+        <div className={`mb-6 p-4 rounded-xl text-sm text-center ${emailFeedback.type === 'success' ? 'bg-green-900/30 border border-green-600/40 text-green-400' : 'bg-red-900/30 border border-red-600/40 text-red-400'}`}>
+          {emailFeedback.msg}
+        </div>
+      )}
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        {[
+          { key: 'all', label: 'Total', value: counts.all, cls: 'text-white' },
+          { key: 'pending', label: 'Pending', value: counts.pending, cls: 'text-yellow-400' },
+          { key: 'approved', label: 'Approved', value: counts.approved, cls: 'text-green-400' },
+          { key: 'rejected', label: 'Rejected', value: counts.rejected, cls: 'text-red-400' },
+        ].map((s) => (
+          <button key={s.key} type="button" onClick={() => setFilter(s.key)} className={`p-4 rounded-xl border text-center transition ${filter === s.key ? 'border-accent-gold bg-primary-800' : 'border-primary-600 bg-primary-800/50 hover:border-primary-500'}`}>
+            <div className={`text-2xl font-bold ${s.cls}`}>{s.value}</div>
+            <div className="text-primary-400 text-xs mt-1">{s.label}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* Appointments list */}
+      {filtered.length === 0 ? (
+        <div className="text-center py-12 text-primary-400">
+          <p className="text-lg">No {filter === 'all' ? '' : filter} appointments yet.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filtered.map((appt) => {
+            const st = STATUS_CONFIG[appt.status] || STATUS_CONFIG.pending
+            return (
+              <div key={appt.id} className="bg-primary-800 border border-primary-600 rounded-xl p-5 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                  <div>
+                    <h4 className="text-white font-semibold">{appt.name}</h4>
+                    <p className="text-primary-400 text-sm mt-0.5">{appt.email}{appt.phone ? ` · ${appt.phone}` : ''}</p>
+                  </div>
+                  <span className={`text-xs px-3 py-1 rounded-full border font-medium shrink-0 ${st.color}`}>{st.label}</span>
+                </div>
+                <div className="grid sm:grid-cols-3 gap-3 text-sm mb-4">
+                  <div className="bg-primary-900/50 rounded-lg p-3">
+                    <span className="text-primary-400 text-xs block">Date</span>
+                    <span className="text-white font-medium">{appt.date}</span>
+                  </div>
+                  <div className="bg-primary-900/50 rounded-lg p-3">
+                    <span className="text-primary-400 text-xs block">Time</span>
+                    <span className="text-white font-medium">{appt.time}</span>
+                  </div>
+                  <div className="bg-primary-900/50 rounded-lg p-3">
+                    <span className="text-primary-400 text-xs block">Specialty</span>
+                    <span className="text-white font-medium">{appt.specialty || '—'}</span>
+                  </div>
+                </div>
+                {appt.message && (
+                  <p className="text-primary-300 text-sm mb-4 bg-primary-900/30 rounded-lg p-3">"{appt.message}"</p>
+                )}
+                <div className="flex items-center gap-2 flex-wrap text-sm">
+                  {appt.status === 'pending' && (
+                    <>
+                      <button type="button" onClick={() => handleApprove(appt)} className="px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-500 transition">Approve</button>
+                      <button type="button" onClick={() => updateStatus(appt.id, 'rejected')} className="px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-500 transition">Reject</button>
+                    </>
+                  )}
+                  {appt.status === 'rejected' && (
+                    <button type="button" onClick={() => handleApprove(appt)} className="px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-500 transition">Approve</button>
+                  )}
+                  {appt.status === 'approved' && (
+                    <button type="button" onClick={() => updateStatus(appt.id, 'pending')} className="px-4 py-2 rounded-lg border border-primary-600 text-primary-300 font-medium hover:bg-primary-700 transition">Revert to Pending</button>
+                  )}
+                  <button type="button" onClick={() => { if (confirm('Delete this appointment?')) deleteAppointment(appt.id) }} className="px-4 py-2 rounded-lg border border-red-600/50 text-red-400 font-medium hover:bg-red-900/20 transition ml-auto">Delete</button>
+                </div>
+                <p className="text-primary-500 text-xs mt-3">Booked: {new Date(appt.createdAt).toLocaleString()}</p>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function Admin() {
   const [authenticated, setAuthenticated] = useState(() => sessionStorage.getItem('admin-auth') === '1')
   const { config, updateSection, replaceConfig, resetToDefaults } = useSiteConfig()
@@ -561,19 +681,24 @@ export default function Admin() {
           </div>
         </div>
 
+        {/* Appointments view */}
+        {activePage === 'appointments' && <AppointmentsManager />}
+
         {/* Section editors for current page */}
-        <div className="space-y-8">
-          {currentPage.sections.map((s) => (
-            <section key={s.id} className="bg-primary-800 border border-primary-600 rounded-xl overflow-hidden">
-              <div className="px-6 py-4 bg-primary-800 border-b border-primary-700 text-center">
-                <h3 className="text-lg font-semibold text-accent-gold">{s.label}</h3>
-              </div>
-              <div className="p-6">
-                <SectionEditor sectionId={s.id} config={config} updateSection={updateSection} />
-              </div>
-            </section>
-          ))}
-        </div>
+        {activePage !== 'appointments' && (
+          <div className="space-y-8">
+            {currentPage.sections.map((s) => (
+              <section key={s.id} className="bg-primary-800 border border-primary-600 rounded-xl overflow-hidden">
+                <div className="px-6 py-4 bg-primary-800 border-b border-primary-700 text-center">
+                  <h3 className="text-lg font-semibold text-accent-gold">{s.label}</h3>
+                </div>
+                <div className="p-6">
+                  <SectionEditor sectionId={s.id} config={config} updateSection={updateSection} />
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
 
         {/* Import/Export */}
         {activePage === 'global' && (
