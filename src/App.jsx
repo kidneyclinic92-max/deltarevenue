@@ -25,8 +25,8 @@ export default function App() {
   return (
     <>
         {/* Hero */}
-        <section className="relative bg-primary-900 text-accent-gold overflow-hidden min-h-[44rem] lg:min-h-[50rem] flex items-center">
-          <div className="absolute inset-0">
+        <section className="relative bg-primary-900 text-accent-gold overflow-hidden min-h-[60vh] sm:min-h-[70vh] lg:min-h-[50rem] flex items-center">
+          <div className="absolute inset-0 overflow-hidden">
             <video
               autoPlay
               muted

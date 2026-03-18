@@ -50,18 +50,26 @@ export default function Layout() {
   const navLinks = ensureNavLinks(header.navLinks)
   const footerLinks = ensureNavLinks(footer.links)
 
-  const NavLink = ({ link }) => {
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location.pathname, location.hash])
+
+  const NavLink = ({ link, mobile }) => {
+    const cls = mobile
+      ? 'block w-full py-2 text-primary-200 hover:text-accent-gold transition text-base'
+      : 'text-primary-200 hover:text-accent-gold transition'
+    const close = () => setMobileMenuOpen(false)
     if (link.href.startsWith('/')) {
-      return <Link to={link.href} onClick={() => setMobileMenuOpen(false)} className="text-primary-200 hover:text-accent-gold transition">{link.label}</Link>
+      return <Link to={link.href} onClick={close} className={cls}>{link.label}</Link>
     }
     if (link.href.startsWith('#')) {
-      return <Link to={`/${link.href}`} onClick={() => setMobileMenuOpen(false)} className="text-primary-200 hover:text-accent-gold transition">{link.label}</Link>
+      return <Link to={`/${link.href}`} onClick={close} className={cls}>{link.label}</Link>
     }
-    return <a href={link.href} onClick={() => setMobileMenuOpen(false)} className="text-primary-200 hover:text-accent-gold transition">{link.label}</a>
+    return <a href={link.href} onClick={close} className={cls}>{link.label}</a>
   }
 
   return (
-    <div className="min-h-screen bg-primary-900">
+    <div className="min-h-screen bg-primary-900 overflow-x-hidden">
       <header className="fixed top-0 left-0 right-0 z-50 bg-primary-900 border-b border-primary-800 w-full">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18 w-full">
@@ -79,16 +87,26 @@ export default function Layout() {
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">{mobileMenuOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}</svg>
             </button>
           </div>
-          {mobileMenuOpen && (
-            <div className="lg:hidden py-4 border-t border-primary-800 space-y-3">
-              {navLinks.map((link) => (
-                <NavLink key={link.href} link={link} />
-              ))}
-              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="inline-flex px-4 py-2 rounded-lg bg-accent-gold text-primary-900 font-medium text-sm">{header.ctaText}</Link>
-            </div>
-          )}
         </div>
       </header>
+
+      {/* Mobile menu overlay */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-40" onClick={() => setMobileMenuOpen(false)}>
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          <div
+            className="absolute top-16 right-0 w-3/5 max-w-xs h-[calc(100vh-4rem)] bg-primary-900/95 backdrop-blur-md border-l border-primary-700 shadow-2xl overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col gap-1 p-6 pt-8">
+              {navLinks.map((link) => (
+                <NavLink key={link.href} link={link} mobile />
+              ))}
+              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="inline-flex mt-4 px-4 py-2.5 rounded-lg bg-accent-gold text-primary-900 font-semibold text-sm self-start">{header.ctaText}</Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="pt-16">
         <Outlet />
