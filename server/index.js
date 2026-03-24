@@ -69,7 +69,13 @@ app.post('/api/send-appointment-email', async (req, res) => {
     res.json({ ok: true })
   } catch (err) {
     console.error('Email send error:', err)
-    res.status(500).json({ ok: false, error: err.message || 'Failed to send email' })
+    res.status(500).json({
+      ok: false,
+      error: err?.message || 'Failed to send email',
+      code: err?.code || null,
+      command: err?.command || null,
+      response: err?.response || null,
+    })
   }
 })
 
