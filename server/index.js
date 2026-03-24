@@ -2,6 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fs from 'fs'
 
 dotenv.config()
 
@@ -10,6 +13,10 @@ app.use(cors())
 app.use(express.json())
 
 const PORT = process.env.PORT || 3001
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const distPath = path.resolve(__dirname, '../dist')
+const indexPath = path.join(distPath, 'index.html')
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -65,6 +72,19 @@ app.post('/api/send-appointment-email', async (req, res) => {
     res.status(500).json({ ok: false, error: err.message || 'Failed to send email' })
   }
 })
+
+// Health endpoint for Azure checks
+app.get('/api/health', (_req, res) => {
+  res.json({ ok: true })
+})
+
+// Serve frontend in production (single app deployment on Azure)
+if (fs.existsSync(indexPath)) {
+  app.use(express.static(distPath))
+  app.get(/^(?!\/api).*/, (_req, res) => {
+    res.sendFile(indexPath)
+  })
+}
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`)
